@@ -192,3 +192,23 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Ignorar arquivos temporários
+*.pyc
+__pycache__/
+
+# Ignorar arquivos de dados
+*.csv
+*.xlsx
+*.json
+*.parquet
+
+# Ignorar arquivos de ambiente
+.env
+
+# Ignorar arquivos do VSCode
+.vscode/
+
+# Ignorar outros arquivos de sistema
+.DS_Store
+Thumbs.db
