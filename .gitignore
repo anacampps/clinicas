@@ -212,3 +212,10 @@ __pycache__/
 # Ignorar outros arquivos de sistema
 .DS_Store
 Thumbs.db
+
+# Ignorar arquivos na pasta data
+/data/*
+!data/.gitkeep
+
+# Ignorar arquivos csv no output
+/output/
