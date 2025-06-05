@@ -1,6 +1,8 @@
 from shiny import App, ui, render
 import os
 import matplotlib.pyplot as plt
+from dados_auxiliares import regioes
+
 
 visualizacoes_dir = "output/visualizacoes"
 
@@ -10,6 +12,7 @@ def mostrar_imagem(nome_arquivo):
         return ui.img(src=f"/{caminho}", style="max-width: 100%;")
     else:
         return ui.p("Gráfico não encontrado.")
+    
 
 app_ui = ui.page_fluid(
     ui.div(
@@ -51,7 +54,10 @@ app_ui = ui.page_fluid(
             "Dashboard",
             ui.layout_sidebar(
                 ui.sidebar(
-                    ui.input_checkbox_group("periodo", "Período:", ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"]),
+                    ui.input_checkbox_group("periodo", "Período:", [
+                        "2012", "2013", "2014", "2015", "2016", "2017", 
+                        "2018", "2019", "2020", "2021", "2022"
+                    ]),
                     ui.input_select("regiao", "Região:", {
                         "norte": "Norte",
                         "nordeste": "Nordeste",
@@ -59,19 +65,27 @@ app_ui = ui.page_fluid(
                         "sul": "Sul",
                         "centro-oeste": "Centro-Oeste"
                     }),
-                    ui.input_select("rg", "R.G.:", {
-                        "sim": "Sim",
-                        "nao": "Não"
-                    }),
-                    ui.input_checkbox_group("agravantes", "Agravantes:", ["reincidência", "obstrução", "dolo"]),
-                    ui.input_checkbox_group("atenuantes", "Atenuantes:", ["colaboração", "baixa gravidade", "arrependimento"])
+                    ui.input_selectize(
+                        "ramos",
+                        "Ramos de Atividade:",
+                        multiple=True,
+                        choices=regioes,  # vindo do seu dados_auxiliares.py
+                        selected=[],
+                        width="100%",
+                    ),
+                    ui.input_checkbox_group("agravantes", "Agravantes:", [
+                        "reincidência", "obstrução", "dolo"
+                    ]),
+                    ui.input_checkbox_group("atenuantes", "Atenuantes:", [
+                        "colaboração", "baixa gravidade", "arrependimento"
+                    ])
                 ),
-                [
+                ui.panel_main(
                     ui.h2("Dashboard Interativo"),
                     ui.output_plot("grafico_dashboard")
-                ]
+                )
             )
-        ),
+        )
 
     )
 )
@@ -113,3 +127,9 @@ def server(input, output, session):
         return fig
     
 app = App(app_ui, server)
+
+
+# Dicionário Ramos de Atividade
+
+
+
