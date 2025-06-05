@@ -75,7 +75,19 @@ def processar_dados_cade(caminho_arquivo, diretorio_saida='output'):
     print("Extraindo percentuais de multa e elementos de dosimetria...")
     df_processado = aplicar_extracao_ao_dataframe(df_votos)
     print(f"Extração concluída. Shape: {df_processado.shape}")
-    
+    # Filtrar apenas os documentos com condenação
+    print("Filtrando documentos com condenação (multas identificadas)...")
+    df_condenados = df_processado[
+        (df_processado['percentual_multa'].notnull()) | 
+        (df_processado['valor_multa_reais'].notnull())
+    ]
+    print(f"Documentos com condenação: {df_condenados.shape[0]}")
+
+    # Salvar DataFrame dos condenados
+    caminho_df_condenados = os.path.join(diretorio_saida, 'df_condenados.csv')
+    df_condenados.to_csv(caminho_df_condenados, index=False, encoding='utf-8-sig')
+    print(f"DataFrame dos condenados salvo em: {caminho_df_condenados}")
+
     # Salvar DataFrame processado
     caminho_df_processado = os.path.join(diretorio_saida, 'df_processado.csv')
     df_processado.to_csv(caminho_df_processado, index=False)

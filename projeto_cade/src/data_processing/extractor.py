@@ -185,5 +185,10 @@ def aplicar_extracao_ao_dataframe(df, coluna_texto='texto_completo'):
         df_resultado[f'dosimetria_{elemento}'] = df_resultado['elementos_dosimetria'].apply(
             lambda x: x.get(elemento) if isinstance(x, dict) else None
         )
-    
-    return df_resultado
+    # Filtrar apenas os documentos com condenação
+    df_condenados = df_resultado[
+    (df_resultado['percentual_multa'].notnull()) | 
+    (df_resultado['valor_multa_reais'].notnull())
+]
+
+    return df_condenados
